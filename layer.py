@@ -26,8 +26,9 @@ def variable_inverse(variable, name=''):
         print('layer without name...')
     with tf.variable_scope(name, reuse=False):
         s, u, v = tf.svd(variable)
-        return tf.matmul(tf.matmul(tf.transpose(v), tf.matrix_inverse(tf.diag(s))), tf.transpose(u))
-
+        res = tf.matmul(tf.matmul(tf.transpose(v), tf.matrix_inverse(tf.diag(s + tf.ones_like(s) * 1e-8))), tf.transpose(u))
+        return res
+    
 def leaky_relu(input_tensor, alpha=0.2):
     return tf.maximum(alpha * input_tensor, input_tensor)
 
